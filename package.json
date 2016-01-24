@@ -4,7 +4,7 @@
   "private": true,
   "description": "A starter template for static web projects.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "gulp test",
     "postinstall": "bower install --config.interactive=false"
   },
   "repository": {
