@@ -1,13 +1,20 @@
 'use strict';
 
 var gulp = require('gulp');
-var webserver = require('gulp-server-livereload');
+var livereload = require('gulp-server-livereload');
 var sass = require('gulp-sass');
 var eslint = require('gulp-eslint');
+var useref = require('gulp-useref');
+var gulpif = require('gulp-if');
+var uglify = require('gulp-uglify');
+var cssnano = require('gulp-cssnano');
+var htmlmin = require('gulp-htmlmin');
+var serve = require('gulp-serve');
+var rimraf = require('rimraf');
 
 gulp.task('serve', function() {
   gulp.src('app/public')
-    .pipe(webserver({
+    .pipe(livereload({
       livereload: true,
       port: 1337,
       open: true
@@ -41,6 +48,24 @@ gulp.task('eslint', function() {
 gulp.task('eslint:watch', function() {
   gulp.watch(jsFiles, ['eslint']);
 });
+
+gulp.task('build', ['sass'], function() {
+  return gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
+    .pipe(useref())
+    .pipe(gulpif(['*.js', '!vendor.js'], uglify()))
+    .pipe(gulpif('*.css', cssnano()))
+    .pipe(gulpif('*.html', htmlmin({ collapseWhitespace: true })))
+    .pipe(gulp.dest('app/dist'));
+});
+
+gulp.task('clean', function(done) {
+  rimraf('app/dist', done);
+});
+
+gulp.task('serve:dist', ['build'], serve({
+  root: 'app/dist',
+  port: 1338
+}));
 
 gulp.task('default', [
   'eslint',
