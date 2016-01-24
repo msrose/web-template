@@ -1,12 +1,14 @@
 'use strict';
 
 var gulp = require('gulp');
+var cache = require('gulp-cached');
 var livereload = require('gulp-server-livereload');
 var sass = require('gulp-sass');
 var eslint = require('gulp-eslint');
 var useref = require('gulp-useref');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
+var autoprefixer = require('gulp-autoprefixer');
 var cssnano = require('gulp-cssnano');
 var htmlmin = require('gulp-htmlmin');
 var serve = require('gulp-serve');
@@ -27,6 +29,7 @@ var sassFiles = 'app/src/sass/**/*.scss';
 // compile sass files to css
 gulp.task('sass', function() {
   gulp.src(sassFiles)
+    .pipe(cache('sass'))
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('app/public/styles/compiled'));
 });
@@ -43,15 +46,16 @@ var jsFiles = [
 ];
 
 // lint javascript files
-gulp.task('eslint', function() {
+gulp.task('lint', function() {
   return gulp.src(jsFiles)
+    .pipe(cache('linting'))
     .pipe(eslint())
     .pipe(eslint.format());
 });
 
 // lint javascript every time a file is changed
-gulp.task('eslint:watch', function() {
-  gulp.watch(jsFiles, ['eslint']);
+gulp.task('lint:watch', function() {
+  gulp.watch(jsFiles, ['lint']);
 });
 
 // build for production: concatenate, minify
@@ -59,6 +63,7 @@ gulp.task('build', ['sass'], function() {
   return gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
     .pipe(useref())
     .pipe(gulpif(['*.js', '!vendor.js'], uglify()))
+    .pipe(gulpif('*.css', autoprefixer()))
     .pipe(gulpif('*.css', cssnano()))
     .pipe(gulpif('*.html', htmlmin({ collapseWhitespace: true })))
     .pipe(gulp.dest('app/dist'));
@@ -76,9 +81,9 @@ gulp.task('clean', function(done) {
 });
 
 gulp.task('default', [
-  'eslint',
+  'lint',
   'sass',
-  'eslint:watch',
+  'lint:watch',
   'sass:watch',
   'serve'
 ]);
