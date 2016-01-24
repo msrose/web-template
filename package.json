@@ -1,0 +1,31 @@
+{
+  "name": "web-template",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A starter template for static web projects.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msrose/web-template.git"
+  },
+  "keywords": [
+    "web",
+    "template",
+    "starter",
+    "website"
+  ],
+  "author": "Michael Rose",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msrose/web-template/issues"
+  },
+  "homepage": "https://github.com/msrose/web-template#readme",
+  "devDependencies": {
+    "bower": "^1.7.2",
+    "gulp": "^3.9.0",
+    "gulp-serve": "^1.2.0"
+  }
+}
