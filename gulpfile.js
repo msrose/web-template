@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 var cache = require('gulp-cached');
-var livereload = require('gulp-server-livereload');
+var webserver = require('gulp-server-livereload');
 var sass = require('gulp-sass');
 var eslint = require('gulp-eslint');
 var useref = require('gulp-useref');
@@ -11,13 +11,12 @@ var uglify = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
 var cssnano = require('gulp-cssnano');
 var htmlmin = require('gulp-htmlmin');
-var serve = require('gulp-serve');
 var rimraf = require('rimraf');
 
 // serve the application for development
 gulp.task('serve', function() {
   gulp.src('app/public')
-    .pipe(livereload({
+    .pipe(webserver({
       livereload: true,
       port: 1337,
       open: true
@@ -70,10 +69,14 @@ gulp.task('build', ['sass'], function() {
 });
 
 // test production build in the browser
-gulp.task('serve:dist', ['build'], serve({
-  root: 'app/dist',
-  port: 1338
-}));
+gulp.task('serve:dist', ['build'], function() {
+  gulp.src('app/dist')
+    .pipe(webserver({
+      livereload: false,
+      port: 1338,
+      open: true
+    }));
+});
 
 // remove built files
 gulp.task('clean', function(done) {
