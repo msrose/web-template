@@ -1,4 +1,7 @@
-node_modules
-app/public/lib
+node_modules/
+
+app/public/lib/
+app/public/styles/compiled/
+
 *.swp
 *.swo
