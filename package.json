@@ -28,6 +28,12 @@
     "gulp": "^3.9.0",
     "gulp-eslint": "^1.1.1",
     "gulp-sass": "^2.1.1",
-    "gulp-server-livereload": "^1.6.2"
+    "gulp-server-livereload": "^1.6.2",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.19",
+    "karma-jasmine": "^0.3.6",
+    "karma-mocha-reporter": "^1.1.5",
+    "karma-phantomjs-launcher": "^0.2.3",
+    "phantomjs": "^1.9.19"
   }
 }
