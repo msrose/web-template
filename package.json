@@ -4,6 +4,7 @@
   "private": true,
   "description": "A starter template for static web projects.",
   "scripts": {
+    "start": "gulp",
     "test": "karma start --single-run",
     "tdd": "karma start --auto-watch",
     "postinstall": "bower install --config.interactive=false"

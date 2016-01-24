@@ -24,8 +24,30 @@ git commit -m "Initial commit"
 Start developing:
 
 ```
-npm install -g gulp
 npm install
+npm start
+```
+
+Run tests once:
+
+```
 npm test
-gulp
+```
+
+Run tests every time a file is changed:
+
+```
+npm run tdd
+```
+
+Build for production:
+
+```
+gulp build
+```
+
+Test the production build in the browser:
+
+```
+gulp serve:dist
 ```

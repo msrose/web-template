@@ -12,6 +12,7 @@ var htmlmin = require('gulp-htmlmin');
 var serve = require('gulp-serve');
 var rimraf = require('rimraf');
 
+// serve the application for development
 gulp.task('serve', function() {
   gulp.src('app/public')
     .pipe(livereload({
@@ -23,12 +24,14 @@ gulp.task('serve', function() {
 
 var sassFiles = 'app/src/sass/**/*.scss';
 
+// compile sass files to css
 gulp.task('sass', function() {
   gulp.src(sassFiles)
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('app/public/styles/compiled'));
 });
 
+// recompile sass when a file is changed
 gulp.task('sass:watch', function() {
   gulp.watch(sassFiles, ['sass']);
 });
@@ -39,16 +42,19 @@ var jsFiles = [
   'app/src/tests/**/*.js'
 ];
 
+// lint javascript files
 gulp.task('eslint', function() {
   return gulp.src(jsFiles)
     .pipe(eslint())
     .pipe(eslint.format());
 });
 
+// lint javascript every time a file is changed
 gulp.task('eslint:watch', function() {
   gulp.watch(jsFiles, ['eslint']);
 });
 
+// build for production: concatenate, minify
 gulp.task('build', ['sass'], function() {
   return gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
     .pipe(useref())
@@ -58,14 +64,16 @@ gulp.task('build', ['sass'], function() {
     .pipe(gulp.dest('app/dist'));
 });
 
-gulp.task('clean', function(done) {
-  rimraf('app/dist', done);
-});
-
+// test production build in the browser
 gulp.task('serve:dist', ['build'], serve({
   root: 'app/dist',
   port: 1338
 }));
+
+// remove built files
+gulp.task('clean', function(done) {
+  rimraf('app/dist', done);
+});
 
 gulp.task('default', [
   'eslint',
