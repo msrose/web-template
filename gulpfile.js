@@ -4,7 +4,6 @@ var gulp = require('gulp');
 var webserver = require('gulp-server-livereload');
 var sass = require('gulp-sass');
 var eslint = require('gulp-eslint');
-var KarmaServer = require('karma').Server;
 
 gulp.task('serve', function() {
   gulp.src('app/public')
@@ -41,13 +40,6 @@ gulp.task('eslint', function() {
 
 gulp.task('eslint:watch', function() {
   gulp.watch(jsFiles, ['eslint']);
-});
-
-gulp.task('test', function(done) {
-  new KarmaServer({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
 });
 
 gulp.task('default', [
