@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var webserver = require('gulp-server-livereload');
 var sass = require('gulp-sass');
+var eslint = require('gulp-eslint');
 
 gulp.task('serve', function() {
   gulp.src('app/public')
@@ -13,14 +14,28 @@ gulp.task('serve', function() {
     }));
 });
 
+var sassFiles = 'app/src/sass/**/*.scss';
+
 gulp.task('sass', function() {
-  gulp.src('app/src/sass/**/*.scss')
+  gulp.src(sassFiles)
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('app/public/styles/compiled'));
 });
 
 gulp.task('sass:watch', function() {
-  gulp.watch('app/src/sass/**/*.scss', ['sass']);
+  gulp.watch(sassFiles, ['sass']);
 });
 
-gulp.task('default', ['sass', 'sass:watch', 'serve']);
+var jsFiles = ['gulpfile.js', 'app/public/scripts/**/*.js'];
+
+gulp.task('eslint', function() {
+  return gulp.src(jsFiles)
+    .pipe(eslint())
+    .pipe(eslint.format());
+});
+
+gulp.task('eslint:watch', function() {
+  gulp.watch(jsFiles, ['eslint']);
+});
+
+gulp.task('default', ['eslint', 'sass', 'eslint:watch', 'sass:watch', 'serve']);
