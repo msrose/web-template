@@ -12,9 +12,10 @@
   }
 
   for(let num of fib()) {
-    if(num > 100) {
+    document.write(num)
+    if(num > 1000) {
       break;
     }
-    document.write(num + '<br>');
+    document.write(', ');
   }
 })();
