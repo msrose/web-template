@@ -1,21 +1,19 @@
-'use strict';
-
-var gulp = require('gulp');
-var cache = require('gulp-cached');
-var webserver = require('gulp-server-livereload');
-var sass = require('gulp-sass');
-var eslint = require('gulp-eslint');
-var useref = require('gulp-useref');
-var gulpif = require('gulp-if');
-var uglify = require('gulp-uglify');
-var autoprefixer = require('gulp-autoprefixer');
-var cssnano = require('gulp-cssnano');
-var htmlmin = require('gulp-htmlmin');
-var rimraf = require('rimraf');
-var babel = require('gulp-babel');
+import gulp from 'gulp';
+import cache from 'gulp-cached';
+import webserver from 'gulp-server-livereload';
+import sass from 'gulp-sass';
+import eslint from 'gulp-eslint';
+import useref from 'gulp-useref';
+import gulpif from 'gulp-if';
+import uglify from 'gulp-uglify';
+import autoprefixer from 'gulp-autoprefixer';
+import cssnano from 'gulp-cssnano';
+import htmlmin from 'gulp-htmlmin';
+import rimraf from 'rimraf';
+import babel from 'gulp-babel';
 
 // serve the application for development
-gulp.task('serve', function() {
+gulp.task('serve', () => {
   gulp.src('app/public')
     .pipe(webserver({
       livereload: true,
@@ -27,7 +25,7 @@ gulp.task('serve', function() {
 var sassFiles = 'app/src/sass/**/*.scss';
 
 // compile sass files to css
-gulp.task('sass', function() {
+gulp.task('sass', () => {
   gulp.src(sassFiles)
     .pipe(cache('sass'))
     .pipe(sass().on('error', sass.logError))
@@ -35,7 +33,7 @@ gulp.task('sass', function() {
 });
 
 // recompile sass when a file is changed
-gulp.task('sass:watch', function() {
+gulp.task('sass:watch', () => {
   gulp.watch(sassFiles, ['sass']);
 });
 
@@ -58,13 +56,13 @@ var babelTests = [
 var babelFiles = babelScripts.concat(babelTests);
 
 // copy polyfill file from npm package to be used in browser
-gulp.task('copy:polyfill', function() {
+gulp.task('copy:polyfill', () => {
   gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
     .pipe(gulp.dest('app/public/lib/babel-polyfill'));
 });
 
 // compile js source files with babel
-gulp.task('babel:scripts', function() {
+gulp.task('babel:scripts', () => {
   return gulp.src(babelScripts)
     .pipe(cache('babelScripts'))
     .pipe(babel())
@@ -72,7 +70,7 @@ gulp.task('babel:scripts', function() {
 });
 
 // compile js test files with babel
-gulp.task('babel:tests', function() {
+gulp.task('babel:tests', () => {
   return gulp.src(babelTests)
     .pipe(cache('babelTests'))
     .pipe(babel())
@@ -83,14 +81,14 @@ gulp.task('babel:tests', function() {
 gulp.task('babel', ['babel:scripts', 'babel:tests']);
 
 // compile with babel every time a file is changed
-gulp.task('babel:watch', function() {
+gulp.task('babel:watch', () => {
   gulp.watch(babelFiles, ['babel']);
 });
 
 var allJs = jsFiles.concat(babelFiles);
 
 // lint javascript files
-gulp.task('lint', function() {
+gulp.task('lint', () => {
   return gulp.src(allJs)
     .pipe(cache('linting'))
     .pipe(eslint())
@@ -98,7 +96,7 @@ gulp.task('lint', function() {
 });
 
 // lint javascript every time a file is changed
-gulp.task('lint:watch', function() {
+gulp.task('lint:watch', () => {
   gulp.watch(allJs, ['lint']);
 });
 
@@ -109,12 +107,12 @@ gulp.task('watch', ['sass:watch', 'babel:watch', 'lint:watch']);
 gulp.task('compile', ['sass', 'babel']);
 
 // remove compiled files
-gulp.task('clean:compiled', function(done) {
+gulp.task('clean:compiled', (done) => {
   rimraf('app/public/*/compiled', done);
 });
 
 // build for production: concatenate, minify
-gulp.task('build', ['clean', 'compile'], function() {
+gulp.task('build', ['clean', 'compile'], () => {
   return gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
     .pipe(useref())
     .pipe(gulpif(['*.js', '!vendor.js'], uglify()))
@@ -125,7 +123,7 @@ gulp.task('build', ['clean', 'compile'], function() {
 });
 
 // test production build in the browser
-gulp.task('serve:dist', ['build'], function() {
+gulp.task('serve:dist', ['build'], () => {
   gulp.src('app/dist')
     .pipe(webserver({
       livereload: false,
@@ -135,7 +133,7 @@ gulp.task('serve:dist', ['build'], function() {
 });
 
 // remove built files
-gulp.task('clean:dist', function(done) {
+gulp.task('clean:dist', (done) => {
   rimraf('app/dist', done);
 });
 
