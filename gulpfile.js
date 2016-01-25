@@ -42,13 +42,50 @@ gulp.task('sass:watch', function() {
 var jsFiles = [
   'gulpfile.js',
   'app/public/scripts/**/*.js',
-  '!app/public/scripts/compiled/*.js',
+  'app/public/tests/**/*.js',
+  '!app/public/scripts/compiled/**/*.js',
+  '!app/public/tests/compiled/**/*.js'
+];
+
+var babelScripts = [
+  'app/src/scripts/**/*.js'
+];
+
+var babelTests = [
   'app/src/tests/**/*.js'
 ];
 
-var babelFiles = [
-  'app/src/scripts/**/*.js'
-];
+var babelFiles = babelScripts.concat(babelTests);
+
+// copy polyfill file from npm package to be used in browser
+gulp.task('copy:polyfill', function() {
+  gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
+    .pipe(gulp.dest('app/public/lib/babel-polyfill'));
+});
+
+// compile js source files with babel
+gulp.task('babel:scripts', function() {
+  return gulp.src(babelScripts)
+    .pipe(cache('babelScripts'))
+    .pipe(babel())
+    .pipe(gulp.dest('app/public/scripts/compiled'));
+});
+
+// compile js test files with babel
+gulp.task('babel:tests', function() {
+  return gulp.src(babelTests)
+    .pipe(cache('babelTests'))
+    .pipe(babel())
+    .pipe(gulp.dest('app/public/tests/compiled'));
+});
+
+// compile es6 features with babel
+gulp.task('babel', ['babel:scripts', 'babel:tests']);
+
+// compile with babel every time a file is changed
+gulp.task('babel:watch', function() {
+  gulp.watch(babelFiles, ['babel']);
+});
 
 var allJs = jsFiles.concat(babelFiles);
 
@@ -65,27 +102,19 @@ gulp.task('lint:watch', function() {
   gulp.watch(allJs, ['lint']);
 });
 
-// compile es6 features with babel
-gulp.task('babel', function() {
-  return gulp.src(babelFiles)
-    .pipe(cache('babel'))
-    .pipe(babel())
-    .pipe(gulp.dest('app/public/scripts/compiled'));
-});
+// run all watch tasks
+gulp.task('watch', ['sass:watch', 'babel:watch', 'lint:watch']);
 
-// compile with babel every time a file is changed
-gulp.task('babel:watch', function() {
-  gulp.watch(babelFiles, ['babel']);
-});
+// run all compilation tasks
+gulp.task('compile', ['sass', 'babel']);
 
-// copy polyfill file from npm package to be used in browser
-gulp.task('copy:polyfill', function() {
-  gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
-    .pipe(gulp.dest('app/public/lib/babel-polyfill'));
+// remove compiled files
+gulp.task('clean:compiled', function(done) {
+  rimraf('app/public/*/compiled', done);
 });
 
 // build for production: concatenate, minify
-gulp.task('build', ['clean', 'sass', 'babel'], function() {
+gulp.task('build', ['clean', 'compile'], function() {
   return gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
     .pipe(useref())
     .pipe(gulpif(['*.js', '!vendor.js'], uglify()))
@@ -110,25 +139,7 @@ gulp.task('clean:dist', function(done) {
   rimraf('app/dist', done);
 });
 
-// remove compiled sass files
-gulp.task('clean:sass', function(done) {
-  rimraf('app/public/styles/compiled', done);
-});
-
-// remove compiled babel files
-gulp.task('clean:babel', function(done) {
-  rimraf('app/public/scripts/compiled', done);
-});
-
 // remove all generated files
-gulp.task('clean', ['clean:dist', 'clean:sass', 'clean:babel']);
+gulp.task('clean', ['clean:compiled', 'clean:dist']);
 
-gulp.task('default', [
-  'lint',
-  'babel',
-  'sass',
-  'lint:watch',
-  'sass:watch',
-  'babel:watch',
-  'serve'
-]);
+gulp.task('default', ['lint', 'compile', 'watch', 'serve']);

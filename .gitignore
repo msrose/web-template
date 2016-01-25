@@ -2,8 +2,7 @@ node_modules/
 
 app/dist/
 app/public/lib/
-app/public/scripts/compiled/
-app/public/styles/compiled/
+app/public/*/compiled/
 
 *.swp
 *.swo
