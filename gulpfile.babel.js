@@ -15,7 +15,7 @@ import runSequence from 'run-sequence';
 
 // serve the application for development
 gulp.task('serve', ['compile'], () => {
-  return gulp.src('app/public')
+  gulp.src('app/public')
     .pipe(webserver({
       livereload: true,
       port: 1337,
@@ -128,7 +128,7 @@ gulp.task('build', (done) => {
 
 // test production build in the browser
 gulp.task('serve:dist', ['build'], () => {
-  return gulp.src('app/dist')
+  gulp.src('app/dist')
     .pipe(webserver({
       livereload: false,
       port: 1338,
@@ -144,6 +144,4 @@ gulp.task('clean:dist', (done) => {
 // remove all generated files
 gulp.task('clean', ['clean:compiled', 'clean:dist']);
 
-gulp.task('default', (done) => {
-  runSequence(['lint'], ['watch', 'serve'], done);
-});
+gulp.task('default', ['lint', 'watch', 'serve']);
