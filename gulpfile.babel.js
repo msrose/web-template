@@ -2,6 +2,7 @@ import gulp from 'gulp';
 import cache from 'gulp-cached';
 import webserver from 'gulp-server-livereload';
 import sass from 'gulp-sass';
+import sasslint from 'gulp-sass-lint';
 import eslint from 'gulp-eslint';
 import useref from 'gulp-useref';
 import gulpif from 'gulp-if';
@@ -36,6 +37,19 @@ gulp.task('sass', () => {
 // recompile sass when a file is changed
 gulp.task('sass:watch', () => {
   gulp.watch(sassFiles, ['sass']);
+});
+
+// lint sass files
+gulp.task('sass:lint', () => {
+  return gulp.src(sassFiles)
+    .pipe(cache('sasslint'))
+    .pipe(sasslint())
+    .pipe(sasslint.format());
+});
+
+// lint whenever a sass file is changed
+gulp.task('sass:lint:watch', () => {
+  gulp.watch(sassFiles, ['sass:lint']);
 });
 
 var jsFiles = [
@@ -89,17 +103,23 @@ gulp.task('babel:watch', () => {
 var allJs = jsFiles.concat(babelFiles);
 
 // lint javascript files
-gulp.task('lint', () => {
+gulp.task('js:lint', () => {
   return gulp.src(allJs)
     .pipe(cache('linting'))
     .pipe(eslint())
     .pipe(eslint.format());
 });
 
-// lint javascript every time a file is changed
-gulp.task('lint:watch', () => {
-  gulp.watch(allJs, ['lint']);
+// lint javascript when a file is changed
+gulp.task('js:lint:watch', () => {
+  gulp.watch(allJs, ['js:lint']);
 });
+
+// run all lint tasks
+gulp.task('lint', ['sass:lint', 'js:lint']);
+
+// lint every time a file is changed
+gulp.task('lint:watch', ['js:lint:watch', 'sass:lint:watch']);
 
 // run all watch tasks
 gulp.task('watch', ['sass:watch', 'babel:watch', 'lint:watch']);
