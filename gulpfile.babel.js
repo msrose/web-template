@@ -9,12 +9,13 @@ import uglify from 'gulp-uglify';
 import autoprefixer from 'gulp-autoprefixer';
 import cssnano from 'gulp-cssnano';
 import htmlmin from 'gulp-htmlmin';
-import rimraf from 'rimraf';
 import babel from 'gulp-babel';
+import rimraf from 'rimraf';
+import runSequence from 'run-sequence';
 
 // serve the application for development
-gulp.task('serve', () => {
-  gulp.src('app/public')
+gulp.task('serve', ['compile'], () => {
+  return gulp.src('app/public')
     .pipe(webserver({
       livereload: true,
       port: 1337,
@@ -26,7 +27,7 @@ var sassFiles = 'app/src/sass/**/*.scss';
 
 // compile sass files to css
 gulp.task('sass', () => {
-  gulp.src(sassFiles)
+  return gulp.src(sassFiles)
     .pipe(cache('sass'))
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('app/public/styles/compiled'));
@@ -57,7 +58,7 @@ var babelFiles = babelScripts.concat(babelTests);
 
 // copy polyfill file from npm package to be used in browser
 gulp.task('copy:polyfill', () => {
-  gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
+  return gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
     .pipe(gulp.dest('app/public/lib/babel-polyfill'));
 });
 
@@ -112,19 +113,22 @@ gulp.task('clean:compiled', (done) => {
 });
 
 // build for production: concatenate, minify
-gulp.task('build', ['clean', 'compile'], () => {
-  return gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
-    .pipe(useref())
-    .pipe(gulpif(['*.js', '!vendor.js'], uglify()))
-    .pipe(gulpif('*.css', autoprefixer()))
-    .pipe(gulpif('*.css', cssnano()))
-    .pipe(gulpif('*.html', htmlmin({ collapseWhitespace: true })))
-    .pipe(gulp.dest('app/dist'));
+gulp.task('build', (done) => {
+  runSequence('clean', 'compile', () => {
+    gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
+      .pipe(useref())
+      .pipe(gulpif(['*.js', '!vendor/*.js'], uglify()))
+      .pipe(gulpif(['*.css', '!vendor/*.css'], autoprefixer()))
+      .pipe(gulpif(['*.css', '!vendor/*.css'], cssnano()))
+      .pipe(gulpif('*.html', htmlmin({ collapseWhitespace: true })))
+      .pipe(gulp.dest('app/dist'))
+      .on('end', done);
+  });
 });
 
 // test production build in the browser
 gulp.task('serve:dist', ['build'], () => {
-  gulp.src('app/dist')
+  return gulp.src('app/dist')
     .pipe(webserver({
       livereload: false,
       port: 1338,
@@ -140,4 +144,6 @@ gulp.task('clean:dist', (done) => {
 // remove all generated files
 gulp.task('clean', ['clean:compiled', 'clean:dist']);
 
-gulp.task('default', ['lint', 'compile', 'watch', 'serve']);
+gulp.task('default', (done) => {
+  runSequence(['lint'], ['watch', 'serve'], done);
+});

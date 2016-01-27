@@ -5,6 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- build:css vendor/vendor.css -->
+  <!-- endbuild -->
+
   <!-- build:css application.css -->
   <link rel="stylesheet" type="text/css" href="styles/main.css">
   <link rel="stylesheet" type="text/css" href="styles/compiled/main.css">
@@ -16,8 +19,10 @@
 <body>
   <h1>Web Template</h1>
 
-  <!-- build:js vendor.js -->
+  <!-- build:js vendor/jquery.min.js -->
   <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
+  <!-- endbuild -->
+  <!-- build:js vendor/polyfill.min.js -->
   <script type="text/javascript" src="lib/babel-polyfill/polyfill.min.js"></script>
   <!-- endbuild -->
 

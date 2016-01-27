@@ -12,7 +12,7 @@
   }
 
   for(let num of fib()) {
-    document.write(num)
+    document.write(num);
     if(num > 1000) {
       break;
     }
