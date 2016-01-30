@@ -4,6 +4,10 @@ A starter template for static websites.
 
 ## Getting Started
 
+You should really use npm version 3.x or greater, since it provides a
+[performance boost when using babel](https://babeljs.io/docs/setup/#gulp).
+Also, avoiding infinite nesting of node_modules is just plain nice.
+
 Clone the template:
 
 ```
@@ -21,33 +25,12 @@ git add .
 git commit -m "Initial commit"
 ```
 
-Start developing:
+Start developing: `npm install && gulp`
 
-```
-npm install
-npm start
-```
+Run tests once: `npm test`
 
-Run tests once:
+Run tests every time a file is changed: `npm run tdd`
 
-```
-npm test
-```
+Build for production: `gulp build`
 
-Run tests every time a file is changed:
-
-```
-npm run tdd
-```
-
-Build for production:
-
-```
-gulp build
-```
-
-Test the production build in the browser:
-
-```
-gulp serve:dist
-```
+Test the production build in the browser: `gulp serve:dist`
