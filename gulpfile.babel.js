@@ -14,6 +14,34 @@ import babel from 'gulp-babel';
 import rimraf from 'rimraf';
 import runSequence from 'run-sequence';
 
+var sassFiles = 'app/src/sass/**/*.scss';
+
+var jsFiles = [
+  'gulpfile.js',
+  'app/public/scripts/**/*.js',
+  'app/public/tests/**/*.js',
+  '!app/public/scripts/compiled/**/*.js',
+  '!app/public/tests/compiled/**/*.js'
+];
+
+var babelScripts = [
+  'app/src/scripts/**/*.js'
+];
+
+var babelTests = [
+  'app/src/tests/**/*.js'
+];
+
+var babelFiles = babelScripts.concat(babelTests);
+
+var allJs = jsFiles.concat(babelFiles);
+
+// copy files from npm packages to be used in browser
+gulp.task('copy:node', () => {
+  return gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
+    .pipe(gulp.dest('app/public/lib/node'));
+});
+
 // serve the application for development
 gulp.task('serve', ['compile'], () => {
   gulp.src('app/public')
@@ -23,8 +51,6 @@ gulp.task('serve', ['compile'], () => {
       open: true
     }));
 });
-
-var sassFiles = 'app/src/sass/**/*.scss';
 
 // compile sass files to css
 gulp.task('sass', () => {
@@ -52,30 +78,6 @@ gulp.task('sass:lint:watch', () => {
   gulp.watch(sassFiles, ['sass:lint']);
 });
 
-var jsFiles = [
-  'gulpfile.js',
-  'app/public/scripts/**/*.js',
-  'app/public/tests/**/*.js',
-  '!app/public/scripts/compiled/**/*.js',
-  '!app/public/tests/compiled/**/*.js'
-];
-
-var babelScripts = [
-  'app/src/scripts/**/*.js'
-];
-
-var babelTests = [
-  'app/src/tests/**/*.js'
-];
-
-var babelFiles = babelScripts.concat(babelTests);
-
-// copy polyfill file from npm package to be used in browser
-gulp.task('copy:polyfill', () => {
-  return gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
-    .pipe(gulp.dest('app/public/lib/babel-polyfill'));
-});
-
 // compile js source files with babel
 gulp.task('babel:scripts', () => {
   return gulp.src(babelScripts)
@@ -99,8 +101,6 @@ gulp.task('babel', ['babel:scripts', 'babel:tests']);
 gulp.task('babel:watch', () => {
   gulp.watch(babelFiles, ['babel']);
 });
-
-var allJs = jsFiles.concat(babelFiles);
 
 // lint javascript files
 gulp.task('js:lint', () => {
@@ -127,11 +127,6 @@ gulp.task('watch', ['sass:watch', 'babel:watch', 'lint:watch']);
 // run all compilation tasks
 gulp.task('compile', ['sass', 'babel']);
 
-// remove compiled files
-gulp.task('clean:compiled', (done) => {
-  rimraf('app/public/*/compiled', done);
-});
-
 // build for production: concatenate, minify
 gulp.task('build', (done) => {
   runSequence('clean', 'compile', () => {
@@ -154,6 +149,11 @@ gulp.task('serve:dist', ['build'], () => {
       port: 1338,
       open: true
     }));
+});
+
+// remove compiled files
+gulp.task('clean:compiled', (done) => {
+  rimraf('app/public/*/compiled', done);
 });
 
 // remove built files

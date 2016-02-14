@@ -7,7 +7,7 @@
     "start": "gulp",
     "test": "gulp compile && karma start --single-run",
     "tdd": "gulp compile && karma start --auto-watch",
-    "postinstall": "bower install --config.interactive=false && gulp copy:polyfill"
+    "postinstall": "gulp copy:node && bower install --config.interactive=false"
   },
   "repository": {
     "type": "git",
