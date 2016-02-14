@@ -6,9 +6,14 @@ import './tasks/javascript'
 import './tasks/build'
 import './tasks/clean'
 
+var nodeFiles = [
+  'node_modules/babel-polyfill/dist/polyfill.min.js',
+  'node_modules/normalize.css/normalize.css'
+];
+
 // copy files from npm packages to be used in browser
 gulp.task('copy:node', () => {
-  return gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
+  return gulp.src(nodeFiles)
     .pipe(gulp.dest('app/public/lib/node'));
 });
 
