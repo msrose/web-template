@@ -3,7 +3,7 @@
 (() => {
   function* fib() {
     let prev = 0, cur = 1;
-    for (;;) {
+    for(;;) {
       yield cur;
       let temp = cur;
       cur = cur + prev;
@@ -11,9 +11,9 @@
     }
   }
 
-  for (let num of fib()) {
+  for(let num of fib()) {
     document.write(num);
-    if (num > 1000) {
+    if(num > 1000) {
       break;
     }
     document.write(', ');
