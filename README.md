@@ -1,5 +1,7 @@
 # Web Template
 
+[![devDependency Status](https://david-dm.org/msrose/web-template/dev-status.svg)](https://david-dm.org/msrose/web-template#info=devDependencies)
+
 A starter template for static websites.
 
 ## Getting Started
