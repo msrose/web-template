@@ -4,7 +4,8 @@ import eslint from 'gulp-eslint';
 import babel from 'gulp-babel';
 
 var jsFiles = [
-  'gulpfile.js',
+  'gulpfile.babel.js',
+  'tasks/**/*.js',
   'app/public/scripts/**/*.js',
   'app/public/tests/**/*.js',
   '!app/public/scripts/compiled/**/*.js',
