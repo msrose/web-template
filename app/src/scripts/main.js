@@ -1,6 +1,7 @@
 // compile javascript in here with babel
 
 (() => {
+
   function* fib() {
     let prev = 0, cur = 1;
     for(;;) {
@@ -11,11 +12,14 @@
     }
   }
 
+  let text = '';
   for(let num of fib()) {
-    document.write(num);
+    text += num;
     if(num > 1000) {
       break;
     }
-    document.write(', ');
+    text += ', ';
   }
+  $('#fibonacci').text(text);
+
 })();
