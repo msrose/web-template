@@ -12,7 +12,7 @@ module.exports = {
   },
   extends: 'eslint:recommended',
   rules: {
-    camelcase: 2,
+    camelcase: [2, { properties: 'never' }],
     curly: [2, 'multi-line'],
     eqeqeq: 2,
     indent: [2, 2],
