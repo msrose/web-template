@@ -1,8 +1,8 @@
+/* eslint no-console: 0 */
 import gulp from 'gulp';
 import cache from 'gulp-cached';
 import eslint from 'gulp-eslint';
 import babel from 'gulp-babel';
-import plumber from 'gulp-plumber';
 
 var jsFiles = [
   'gulpfile.babel.js',
@@ -29,8 +29,11 @@ var allJs = jsFiles.concat(babelFiles);
 gulp.task('babel:scripts', () => {
   return gulp.src(babelScripts)
     .pipe(cache('babelScripts'))
-    .pipe(plumber())
     .pipe(babel())
+    .on('error', (error) => {
+      console.log(error.message);
+      console.log(error.codeFrame);
+    })
     .pipe(gulp.dest('app/public/scripts/compiled'));
 });
 
@@ -39,6 +42,10 @@ gulp.task('babel:tests', () => {
   return gulp.src(babelTests)
     .pipe(cache('babelTests'))
     .pipe(babel())
+    .on('error', (error) => {
+      console.log(error.message);
+      console.log(error.codeFrame);
+    })
     .pipe(gulp.dest('app/public/tests/compiled'));
 });
 
