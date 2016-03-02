@@ -1,6 +1,6 @@
 // compile javascript in here with babel
 
-(() => {
+(($) => {
 
   function* fib() {
     let prev = 0, cur = 1;
@@ -22,4 +22,4 @@
   }
   $('#fibonacci').text(text);
 
-})();
+})(jQuery);

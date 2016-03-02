@@ -2,6 +2,7 @@ import gulp from 'gulp';
 import cache from 'gulp-cached';
 import eslint from 'gulp-eslint';
 import babel from 'gulp-babel';
+import plumber from 'gulp-plumber';
 
 var jsFiles = [
   'gulpfile.babel.js',
@@ -28,6 +29,7 @@ var allJs = jsFiles.concat(babelFiles);
 gulp.task('babel:scripts', () => {
   return gulp.src(babelScripts)
     .pipe(cache('babelScripts'))
+    .pipe(plumber())
     .pipe(babel())
     .pipe(gulp.dest('app/public/scripts/compiled'));
 });
