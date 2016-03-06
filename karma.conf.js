@@ -15,10 +15,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'app/public/lib/jquery/dist/jquery.min.js',
-      'app/public/lib/babel-polyfill/polyfill.min.js',
-      'app/public/scripts/**/*.js',
-      'app/public/tests/**/*.js'
+      'public/lib/jquery/dist/jquery.min.js',
+      'public/lib/babel-polyfill/polyfill.min.js',
+      'public/scripts/**/*.js',
+      'public/tests/**/*.js'
     ],
 
 

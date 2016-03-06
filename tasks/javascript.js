@@ -11,11 +11,11 @@ var jsFiles = [
 ];
 
 var babelScripts = [
-  'app/src/scripts/**/*.js'
+  'src/scripts/**/*.js'
 ];
 
 var babelTests = [
-  'app/src/tests/**/*.js'
+  'src/tests/**/*.js'
 ];
 
 var babelFiles = babelScripts.concat(babelTests);
@@ -31,7 +31,7 @@ gulp.task('babel:scripts', () => {
       console.log(error.message);
       console.log(error.codeFrame);
     })
-    .pipe(gulp.dest('app/public/scripts'));
+    .pipe(gulp.dest('public/scripts'));
 });
 
 // compile js test files with babel
@@ -43,7 +43,7 @@ gulp.task('babel:tests', () => {
       console.log(error.message);
       console.log(error.codeFrame);
     })
-    .pipe(gulp.dest('app/public/tests'));
+    .pipe(gulp.dest('public/tests'));
 });
 
 // compile es6 features with babel

@@ -1,8 +1,7 @@
 node_modules/
 
-app/dist/
-app/public/
-!app/public/**/*.html
+dist/
+public/
 
 *.swp
 *.swo

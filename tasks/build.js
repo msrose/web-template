@@ -10,13 +10,13 @@ import runSequence from 'run-sequence';
 // build for production: concatenate, minify
 gulp.task('build', (done) => {
   runSequence('clean', 'compile', () => {
-    gulp.src(['app/public/*[!lib]*/*.html', 'app/public/*.html'])
+    gulp.src(['public/*[!lib]*/*.html', 'public/*.html'])
       .pipe(useref())
       .pipe(gulpif(['*.js', '!vendor/*.js'], uglify()))
       .pipe(gulpif(['*.css', '!vendor/*.css'], autoprefixer()))
       .pipe(gulpif(['*.css', '!vendor/*.css'], cssnano()))
       .pipe(gulpif('*.html', htmlmin({ collapseWhitespace: true })))
-      .pipe(gulp.dest('app/dist'))
+      .pipe(gulp.dest('dist'))
       .on('end', done);
   });
 });
