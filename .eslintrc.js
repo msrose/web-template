@@ -7,8 +7,7 @@ module.exports = {
     browser: true,
     node: true,
     jasmine: true,
-    es6: true,
-    jquery: true
+    es6: true
   },
   extends: 'eslint:recommended',
   rules: {

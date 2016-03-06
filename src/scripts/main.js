@@ -1,23 +1,13 @@
-(($) => {
+import $ from './jquery';
+import fibonacci from './fibonacci';
 
-  function* fib() {
-    let prev = 0, cur = 1;
-    for(;;) {
-      yield cur;
-      let temp = cur;
-      cur = cur + prev;
-      prev = temp;
-    }
+let text = '';
+for(let num of fibonacci()) {
+  text += num;
+  if(num > 1000) {
+    break;
   }
+  text += ', ';
+}
 
-  let text = '';
-  for(let num of fib()) {
-    text += num;
-    if(num > 1000) {
-      break;
-    }
-    text += ', ';
-  }
-  $('#fibonacci').text(text);
-
-})(jQuery);
+$('#fibonacci').text(text);
