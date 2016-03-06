@@ -4,6 +4,7 @@ import gulp from 'gulp';
 import cache from 'gulp-cached';
 import eslint from 'gulp-eslint';
 import babel from 'gulp-babel';
+import sourcemaps from 'gulp-sourcemaps';
 
 var jsFiles = [
   'gulpfile.babel.js',
@@ -26,11 +27,13 @@ var allJs = jsFiles.concat(babelFiles);
 gulp.task('babel:scripts', () => {
   return gulp.src(babelScripts)
     .pipe(cache('babelScripts'))
+    .pipe(sourcemaps.init())
     .pipe(babel())
     .on('error', (error) => {
       console.log(error.message);
       console.log(error.codeFrame);
     })
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/scripts'));
 });
 
