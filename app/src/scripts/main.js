@@ -1,5 +1,3 @@
-// compile javascript in here with babel
-
 (($) => {
 
   function* fib() {

@@ -1,4 +1,5 @@
 /* eslint no-console: 0 */
+
 import gulp from 'gulp';
 import cache from 'gulp-cached';
 import eslint from 'gulp-eslint';
@@ -6,11 +7,7 @@ import babel from 'gulp-babel';
 
 var jsFiles = [
   'gulpfile.babel.js',
-  'tasks/**/*.js',
-  'app/public/scripts/**/*.js',
-  'app/public/tests/**/*.js',
-  '!app/public/scripts/compiled/**/*.js',
-  '!app/public/tests/compiled/**/*.js'
+  'tasks/**/*.js'
 ];
 
 var babelScripts = [
@@ -34,7 +31,7 @@ gulp.task('babel:scripts', () => {
       console.log(error.message);
       console.log(error.codeFrame);
     })
-    .pipe(gulp.dest('app/public/scripts/compiled'));
+    .pipe(gulp.dest('app/public/scripts'));
 });
 
 // compile js test files with babel
@@ -46,7 +43,7 @@ gulp.task('babel:tests', () => {
       console.log(error.message);
       console.log(error.codeFrame);
     })
-    .pipe(gulp.dest('app/public/tests/compiled'));
+    .pipe(gulp.dest('app/public/tests'));
 });
 
 // compile es6 features with babel

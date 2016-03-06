@@ -3,7 +3,7 @@ import rimraf from 'rimraf';
 
 // remove compiled files
 gulp.task('clean:compiled', (done) => {
-  rimraf('app/public/*/compiled', done);
+  rimraf('app/public/*[!lib]*/*.{js,css}', done);
 });
 
 // remove built files

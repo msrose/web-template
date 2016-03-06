@@ -3,14 +3,14 @@ import cache from 'gulp-cached';
 import sass from 'gulp-sass';
 import sasslint from 'gulp-sass-lint';
 
-var sassFiles = 'app/src/sass/**/*.scss';
+var sassFiles = 'app/src/styles/**/*.scss';
 
 // compile sass files to css
 gulp.task('sass', () => {
   return gulp.src(sassFiles)
     .pipe(cache('sass'))
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('app/public/styles/compiled'));
+    .pipe(gulp.dest('app/public/styles'));
 });
 
 // recompile sass when a file is changed
